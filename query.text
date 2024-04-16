@@ -1,0 +1,9 @@
+//install single object
+db.users.insert({name:"aash",address:"sydney",number:"2344322"})
+//insert many object
+db.users.insertMany([
+    {name:"Cash",address:"Brisbane",number:"23443sdads22"},
+    {
+    name:"Harry",address:"UK",number:"2334322", email:"asdasd@sad.com"
+    }
+    ])
