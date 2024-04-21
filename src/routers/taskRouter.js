@@ -1,16 +1,23 @@
 import express from "express";
-import { insertTask } from "../models/taskModel/TaskModel.js";
+import {
+  deleteTasks,
+  insertTask,
+  showTasks,
+  updateTasks,
+} from "../models/taskModel/TaskModel.js";
 const router = express.Router();
 
 //controllers
 
 //get data
 
-router.get("/", (req, res) => {
-  res.json({
-    message: `Welcome to the API!`,
-    data: fakeDb,
-  });
+router.get("/", async (req, res) => {
+  try {
+    const result = await showTasks();
+    result ? res.json(result) : console.log("tasks not found");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 //POST data
@@ -28,32 +35,33 @@ router.post("/", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-  // const id = idGenerator();
-  // console.log(req.body);
-  // fakeDb.push({ ...req.body, id }); //add to the database
 });
 
 //update task
-router.patch("/", (req, res) => {
-  const { id, type } = req.body;
-  fakeDb = fakeDb.map((item) => {
-    if (item.id === id) {
-      return { ...item, type };
-    }
-    return item;
-  });
-  res.json({
-    message: "your task has been updated",
-  });
+router.patch("/", async (req, res) => {
+  try {
+    const { id, type } = req.body;
+    const result = await updateTasks(id, type);
+    res.json(result);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 //delete task
-router.delete("/", (req, res) => {
-  const { id } = req.body;
-  fakeDb = fakeDb.filter((item) => item.id !== id);
-  res.json({
-    message: "your task has been deleted",
-  });
+router.delete("/", async (req, res) => {
+  try {
+    const { id } = req.body;
+    const result = await deleteTasks(id);
+    res.json({ message: "Deleted" });
+  } catch (error) {
+    console.log(error);
+  }
+
+  // fakeDb = fakeDb.filter((item) => item.id !== id);
+  // res.json({
+  //   message: "your task has been deleted",
+  // });
 });
 
 export default router;
