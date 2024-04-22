@@ -11,9 +11,9 @@ export const showTasks = () => {
   return TaskSchema.find();
 };
 // U
-export const updateTasks = (id, type) => {
+export const updateTasks = ({ _id, type }) => {
   return TaskSchema.findByIdAndUpdate(
-    id,
+    _id,
     {
       type: type,
     },
@@ -21,6 +21,6 @@ export const updateTasks = (id, type) => {
   );
 };
 // D
-export const deleteTasks = (id) => {
-  return TaskSchema.findOneAndDelete(id);
+export const deleteTasks = (_id) => {
+  return TaskSchema.findOneAndDelete(_id);
 };

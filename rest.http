@@ -23,7 +23,7 @@ Content-Type: application/json
 
 # body of the request, there should be gap between header and body
 {
-    "id":"662505935edf48cb42b43852",
+    "_id":"6625a701f7ce6b9e831e6e24",
     "type": "bad"
 }
 
@@ -35,5 +35,5 @@ Content-Type: application/json
 
 # body of the request, there should be gap between header and body
 {
-    "id":"662505945edf48cb42b43854"
+    "_id":"662505945edf48cb42b43854"
 }

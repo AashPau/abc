@@ -5,63 +5,76 @@ import {
   showTasks,
   updateTasks,
 } from "../models/taskModel/TaskModel.js";
+
 const router = express.Router();
 
-//controllers
-
-//get data
-
+// Get data
 router.get("/", async (req, res) => {
   try {
-    const result = await showTasks();
-    result ? res.json(result) : console.log("tasks not found");
+    const task = await showTasks();
+    if (task) {
+      res.json({ status: "success", task });
+    } else {
+      console.log("Tasks not found");
+      res.status(404).json({ error: "Tasks not found" });
+    }
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-//POST data
-
+// POST data
 router.post("/", async (req, res) => {
   try {
     const result = await insertTask(req.body);
-    result?._id
-      ? res.json({
-          message: `New data has been added`,
-        })
-      : res.json({
-          message: `Failed to add new data`,
-        });
+    if (result?._id) {
+      res
+        .status(200)
+        .json({ status: "success", message: "New data has been added" });
+    } else {
+      res.json({
+        status: "fail",
+        message: "Failed to add new data",
+      });
+    }
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({
+      status: "error",
+      error: "Internal server error",
+    });
   }
 });
 
-//update task
+// Update task
 router.patch("/", async (req, res) => {
   try {
-    const { id, type } = req.body;
-    const result = await updateTasks(id, type);
-    res.json(result);
+    const result = await updateTasks(req.body);
+
+    result?._id
+      ? res.json({ message: "updated", result })
+      : res.json({ message: "invalid request" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-//delete task
+// Delete task
 router.delete("/", async (req, res) => {
   try {
-    const { id } = req.body;
-    const result = await deleteTasks(id);
-    res.json({ message: "Deleted" });
+    const { _id } = req.body;
+    const result = await deleteTasks(_id);
+    if (result.deletedCount === 1) {
+      res.json({ message: "Your task has been deleted" });
+    } else {
+      res.status(404).json({ error: "Task not found" });
+    }
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
-
-  // fakeDb = fakeDb.filter((item) => item.id !== id);
-  // res.json({
-  //   message: "your task has been deleted",
-  // });
 });
 
 export default router;

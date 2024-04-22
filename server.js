@@ -3,13 +3,13 @@ const app = express();
 import morgan from "morgan";
 import taskRouter from "./src/routers/taskRouter.js";
 import { connectMongo } from "./src/config/mongoDbConfig.js";
-
+import cors from "cors";
 const PORT = process.env.PORT || 8000;
 
 connectMongo();
 
 //middlewares
-
+app.use(cors());
 app.use(morgan("dev"));
 
 app.use(express.json());
